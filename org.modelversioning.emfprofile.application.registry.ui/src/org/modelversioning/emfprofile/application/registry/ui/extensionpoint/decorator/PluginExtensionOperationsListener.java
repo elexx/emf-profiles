@@ -23,6 +23,12 @@ public interface PluginExtensionOperationsListener {
 	void applyStereotype(EObject eObject);
 	
 	/**
+	 * Executes an action on given {@link EObject}
+	 * @param eObject
+	 */
+	void executeAction(EObject eObject);
+
+	/**
 	 * Notifies the extended plug-in that the 
 	 * new selection on an instance of {@link EObject} 
 	 * was registered. 

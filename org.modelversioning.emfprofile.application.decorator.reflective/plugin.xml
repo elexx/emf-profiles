@@ -13,6 +13,10 @@
             id="org.modelversioning.emfprofile.application.decorator.reflective.commands.ApplyStereotype"
             name="Apply Stereotype">
       </command>
+      <command
+            id="org.modelversioning.emfprofile.application.decorator.reflective.commands.ExecuteAction"
+            name="Execute Action">
+      </command>
    </extension>
    <extension
          point="org.eclipse.ui.menus">
@@ -27,6 +31,12 @@
                style="push"
                tooltip="Apply Stereotype">
          </command>
+         <command
+               commandId="org.modelversioning.emfprofile.application.decorator.reflective.commands.ExecuteAction"
+               label="Execute Action"
+               style="push"
+               tooltip="Execute Action">
+         </command>
       </menuContribution>
       <menuContribution
             allPopups="false"
@@ -36,6 +46,12 @@
                label="Apply Stereotype"
                style="push"
                tooltip="Apply Stereotype">
+         </command>
+         <command
+               commandId="org.modelversioning.emfprofile.application.decorator.reflective.commands.ExecuteAction"
+               label="Execute Action"
+               style="push"
+               tooltip="Execute Action">
          </command>
       </menuContribution>
    </extension>
@@ -52,6 +68,33 @@
       				<equals value="org.eclipse.emf.ecore.presentation.ReflectiveEditorID"/>
       				</or>
    				</with>
+            <with
+                  variable="selection">
+               <iterate
+                     ifEmpty="false"
+                     operator="or">
+                     <instanceof
+                           value="org.eclipse.emf.ecore.EObject">
+                     </instanceof>
+               </iterate>
+               <count
+                     value="1">
+               </count>
+            </with>
+            </and>
+         </enabledWhen>
+      </handler>
+      <handler
+            class="org.modelversioning.emfprofile.application.decorator.reflective.commands.handlers.ExecuteActionHandler"
+            commandId="org.modelversioning.emfprofile.application.decorator.reflective.commands.ExecuteAction">
+         <enabledWhen>
+         <and>
+                <with variable="activeEditorId">
+                <or>
+					<equals value="org.eclipse.emf.ecore.presentation.EcoreEditorID"/>
+					<equals value="org.eclipse.emf.ecore.presentation.ReflectiveEditorID"/>
+					</or>
+				</with>
             <with
                   variable="selection">
                <iterate

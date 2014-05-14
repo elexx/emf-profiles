@@ -12,6 +12,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -40,6 +41,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.commands.ICommandService;
 import org.eclipse.ui.handlers.RegistryToggleState;
 import org.eclipse.ui.services.ISourceProviderService;
+import org.modelversioning.emfprofile.Action;
 import org.modelversioning.emfprofile.Stereotype;
 import org.modelversioning.emfprofile.application.registry.ProfileApplicationDecorator;
 import org.modelversioning.emfprofile.application.registry.ProfileApplicationRegistry;
@@ -252,6 +254,37 @@ public class ActiveEditorObserver implements PluginExtensionOperationsListener {
 			applySteretypeDialog.openApplyStereotypeDialog(eObject);
 		} else {
 			MessageDialog.openInformation(viewer.getControl().getShell(), "Info", "Can not apply any stereotype to EObject: " + eObject.toString() );
+		}
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void executeAction(final EObject eObject) {
+		Assert.isNotNull(eObject);
+		// we are looking in all loaded profiles if there are any stereotypes applicable on eObject
+
+		ProfileApplicationRegistry paRegistry = ProfileApplicationRegistry.INSTANCE;
+		ActiveEditorObserver aeo = ActiveEditorObserver.INSTANCE;
+
+		Map<Stereotype, List<Action>> exectuableActions = new HashMap<>();
+
+		for (ProfileApplicationDecorator profileApplicationDecorator : paRegistry.getProfileApplications(aeo.getModelIdForWorkbenchPart(aeo.getLastActiveEditorPart()))) {
+			System.out.println(profileApplicationDecorator.getName());
+			for (StereotypeApplication stereotypeApplication : profileApplicationDecorator.getStereotypeApplications()) {
+				if (eObject.equals(stereotypeApplication.getAppliedTo())) {
+					System.out.println("found applied stereoytpe: " + stereotypeApplication.getStereotype().getName());
+					exectuableActions.put(stereotypeApplication.getStereotype(), stereotypeApplication.getStereotype().getActions());
+				}
+			}
+		}
+
+		for (Stereotype s : exectuableActions.keySet()) {
+			System.out.println("Stereotype " + s.getName());
+			for (Action a : exectuableActions.get(s)) {
+				System.out.println("   Action " + a.getName());
+			}
 		}
 	}
 	
