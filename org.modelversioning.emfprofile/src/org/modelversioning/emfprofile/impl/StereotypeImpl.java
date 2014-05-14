@@ -22,7 +22,9 @@ import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.EClassImpl;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.util.EObjectContainmentWithInverseEList;
+import org.eclipse.emf.ecore.util.EObjectResolvingEList;
 import org.eclipse.emf.ecore.util.InternalEList;
+import org.modelversioning.emfprofile.Action;
 import org.modelversioning.emfprofile.EMFProfilePackage;
 import org.modelversioning.emfprofile.Extension;
 import org.modelversioning.emfprofile.Profile;
@@ -37,6 +39,7 @@ import org.modelversioning.emfprofile.Stereotype;
  *   <li>{@link org.modelversioning.emfprofile.impl.StereotypeImpl#getIconPath <em>Icon Path</em>}</li>
  *   <li>{@link org.modelversioning.emfprofile.impl.StereotypeImpl#isMetaBase <em>Meta Base</em>}</li>
  *   <li>{@link org.modelversioning.emfprofile.impl.StereotypeImpl#getExtensions <em>Extensions</em>}</li>
+ *   <li>{@link org.modelversioning.emfprofile.impl.StereotypeImpl#getActions <em>Actions</em>}</li>
  * </ul>
  * </p>
  *
@@ -86,6 +89,16 @@ public class StereotypeImpl extends EClassImpl implements Stereotype {
 	 * @ordered
 	 */
 	protected EList<Extension> extensions;
+
+	/**
+	 * The cached value of the '{@link #getActions() <em>Actions</em>}' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getActions()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<Action> actions;
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -372,6 +385,18 @@ public class StereotypeImpl extends EClassImpl implements Stereotype {
 	}
 
 	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EList<Action> getActions() {
+		if (actions == null) {
+			actions = new EObjectResolvingEList<Action>(Action.class, this, EMFProfilePackage.STEREOTYPE__ACTIONS);
+		}
+		return actions;
+	}
+
+	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -384,6 +409,8 @@ public class StereotypeImpl extends EClassImpl implements Stereotype {
 				return isMetaBase();
 			case EMFProfilePackage.STEREOTYPE__EXTENSIONS:
 				return getExtensions();
+			case EMFProfilePackage.STEREOTYPE__ACTIONS:
+				return getActions();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -406,6 +433,10 @@ public class StereotypeImpl extends EClassImpl implements Stereotype {
 				getExtensions().clear();
 				getExtensions().addAll((Collection<? extends Extension>)newValue);
 				return;
+			case EMFProfilePackage.STEREOTYPE__ACTIONS:
+				getActions().clear();
+				getActions().addAll((Collection<? extends Action>)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -426,6 +457,9 @@ public class StereotypeImpl extends EClassImpl implements Stereotype {
 			case EMFProfilePackage.STEREOTYPE__EXTENSIONS:
 				getExtensions().clear();
 				return;
+			case EMFProfilePackage.STEREOTYPE__ACTIONS:
+				getActions().clear();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -443,6 +477,8 @@ public class StereotypeImpl extends EClassImpl implements Stereotype {
 				return metaBase != META_BASE_EDEFAULT;
 			case EMFProfilePackage.STEREOTYPE__EXTENSIONS:
 				return extensions != null && !extensions.isEmpty();
+			case EMFProfilePackage.STEREOTYPE__ACTIONS:
+				return actions != null && !actions.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

@@ -145,13 +145,22 @@ public interface EMFProfilePackage extends EPackage {
 	int PROFILE__ESUPER_PACKAGE = EcorePackage.EPACKAGE__ESUPER_PACKAGE;
 
 	/**
+	 * The feature id for the '<em><b>Actions</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROFILE__ACTIONS = EcorePackage.EPACKAGE_FEATURE_COUNT + 0;
+
+	/**
 	 * The number of structural features of the '<em>Profile</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PROFILE_FEATURE_COUNT = EcorePackage.EPACKAGE_FEATURE_COUNT + 0;
+	int PROFILE_FEATURE_COUNT = EcorePackage.EPACKAGE_FEATURE_COUNT + 1;
 
 	/**
 	 * The meta object id for the '{@link org.modelversioning.emfprofile.impl.StereotypeImpl <em>Stereotype</em>}' class.
@@ -407,13 +416,22 @@ public interface EMFProfilePackage extends EPackage {
 	int STEREOTYPE__EXTENSIONS = EcorePackage.ECLASS_FEATURE_COUNT + 2;
 
 	/**
+	 * The feature id for the '<em><b>Actions</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int STEREOTYPE__ACTIONS = EcorePackage.ECLASS_FEATURE_COUNT + 3;
+
+	/**
 	 * The number of structural features of the '<em>Stereotype</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int STEREOTYPE_FEATURE_COUNT = EcorePackage.ECLASS_FEATURE_COUNT + 3;
+	int STEREOTYPE_FEATURE_COUNT = EcorePackage.ECLASS_FEATURE_COUNT + 4;
 
 
 	/**
@@ -509,6 +527,44 @@ public interface EMFProfilePackage extends EPackage {
 
 
 	/**
+	 * The meta object id for the '{@link org.modelversioning.emfprofile.impl.ActionImpl <em>Action</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.modelversioning.emfprofile.impl.ActionImpl
+	 * @see org.modelversioning.emfprofile.impl.EMFProfilePackageImpl#getAction()
+	 * @generated
+	 */
+	int ACTION = 3;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ACTION__NAME = 0;
+
+	/**
+	 * The feature id for the '<em><b>Id</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ACTION__ID = 1;
+
+	/**
+	 * The number of structural features of the '<em>Action</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ACTION_FEATURE_COUNT = 2;
+
+
+	/**
 	 * Returns the meta object for class '{@link org.modelversioning.emfprofile.Profile <em>Profile</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -517,6 +573,17 @@ public interface EMFProfilePackage extends EPackage {
 	 * @generated
 	 */
 	EClass getProfile();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link org.modelversioning.emfprofile.Profile#getActions <em>Actions</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Actions</em>'.
+	 * @see org.modelversioning.emfprofile.Profile#getActions()
+	 * @see #getProfile()
+	 * @generated
+	 */
+	EReference getProfile_Actions();
 
 	/**
 	 * Returns the meta object for class '{@link org.modelversioning.emfprofile.Stereotype <em>Stereotype</em>}'.
@@ -560,6 +627,17 @@ public interface EMFProfilePackage extends EPackage {
 	 * @generated
 	 */
 	EReference getStereotype_Extensions();
+
+	/**
+	 * Returns the meta object for the reference list '{@link org.modelversioning.emfprofile.Stereotype#getActions <em>Actions</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Actions</em>'.
+	 * @see org.modelversioning.emfprofile.Stereotype#getActions()
+	 * @see #getStereotype()
+	 * @generated
+	 */
+	EReference getStereotype_Actions();
 
 	/**
 	 * Returns the meta object for class '{@link org.modelversioning.emfprofile.Extension <em>Extension</em>}'.
@@ -660,6 +738,38 @@ public interface EMFProfilePackage extends EPackage {
 	EReference getExtension_Subsetting();
 
 	/**
+	 * Returns the meta object for class '{@link org.modelversioning.emfprofile.Action <em>Action</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Action</em>'.
+	 * @see org.modelversioning.emfprofile.Action
+	 * @generated
+	 */
+	EClass getAction();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.modelversioning.emfprofile.Action#getName <em>Name</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Name</em>'.
+	 * @see org.modelversioning.emfprofile.Action#getName()
+	 * @see #getAction()
+	 * @generated
+	 */
+	EAttribute getAction_Name();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.modelversioning.emfprofile.Action#getId <em>Id</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Id</em>'.
+	 * @see org.modelversioning.emfprofile.Action#getId()
+	 * @see #getAction()
+	 * @generated
+	 */
+	EAttribute getAction_Id();
+
+	/**
 	 * Returns the factory that creates the instances of the model.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -690,6 +800,14 @@ public interface EMFProfilePackage extends EPackage {
 		 * @generated
 		 */
 		EClass PROFILE = eINSTANCE.getProfile();
+
+		/**
+		 * The meta object literal for the '<em><b>Actions</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference PROFILE__ACTIONS = eINSTANCE.getProfile_Actions();
 
 		/**
 		 * The meta object literal for the '{@link org.modelversioning.emfprofile.impl.StereotypeImpl <em>Stereotype</em>}' class.
@@ -724,6 +842,14 @@ public interface EMFProfilePackage extends EPackage {
 		 * @generated
 		 */
 		EReference STEREOTYPE__EXTENSIONS = eINSTANCE.getStereotype_Extensions();
+
+		/**
+		 * The meta object literal for the '<em><b>Actions</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference STEREOTYPE__ACTIONS = eINSTANCE.getStereotype_Actions();
 
 		/**
 		 * The meta object literal for the '{@link org.modelversioning.emfprofile.impl.ExtensionImpl <em>Extension</em>}' class.
@@ -798,6 +924,32 @@ public interface EMFProfilePackage extends EPackage {
 		 * @generated
 		 */
 		EReference EXTENSION__SUBSETTING = eINSTANCE.getExtension_Subsetting();
+
+		/**
+		 * The meta object literal for the '{@link org.modelversioning.emfprofile.impl.ActionImpl <em>Action</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.modelversioning.emfprofile.impl.ActionImpl
+		 * @see org.modelversioning.emfprofile.impl.EMFProfilePackageImpl#getAction()
+		 * @generated
+		 */
+		EClass ACTION = eINSTANCE.getAction();
+
+		/**
+		 * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute ACTION__NAME = eINSTANCE.getAction_Name();
+
+		/**
+		 * The meta object literal for the '<em><b>Id</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute ACTION__ID = eINSTANCE.getAction_Id();
 
 	}
 

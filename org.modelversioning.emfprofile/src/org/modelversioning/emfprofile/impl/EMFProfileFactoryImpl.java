@@ -12,6 +12,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
+import org.modelversioning.emfprofile.*;
 import org.modelversioning.emfprofile.EMFProfileFactory;
 import org.modelversioning.emfprofile.EMFProfilePackage;
 import org.modelversioning.emfprofile.Extension;
@@ -33,7 +34,7 @@ public class EMFProfileFactoryImpl extends EFactoryImpl implements EMFProfileFac
 	 */
 	public static EMFProfileFactory init() {
 		try {
-			EMFProfileFactory theEMFProfileFactory = (EMFProfileFactory)EPackage.Registry.INSTANCE.getEFactory("http://www.modelversioning.org/emfprofile/1.1"); 
+			EMFProfileFactory theEMFProfileFactory = (EMFProfileFactory)EPackage.Registry.INSTANCE.getEFactory(EMFProfilePackage.eNS_URI);
 			if (theEMFProfileFactory != null) {
 				return theEMFProfileFactory;
 			}
@@ -65,6 +66,7 @@ public class EMFProfileFactoryImpl extends EFactoryImpl implements EMFProfileFac
 			case EMFProfilePackage.PROFILE: return createProfile();
 			case EMFProfilePackage.STEREOTYPE: return createStereotype();
 			case EMFProfilePackage.EXTENSION: return createExtension();
+			case EMFProfilePackage.ACTION: return createAction();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -98,6 +100,16 @@ public class EMFProfileFactoryImpl extends EFactoryImpl implements EMFProfileFac
 	public Extension createExtension() {
 		ExtensionImpl extension = new ExtensionImpl();
 		return extension;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Action createAction() {
+		ActionImpl action = new ActionImpl();
+		return action;
 	}
 
 	/**

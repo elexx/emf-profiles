@@ -15,6 +15,7 @@ import org.eclipse.emf.common.util.ResourceLocator;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.util.EObjectValidator;
 import org.eclipse.emf.ecore.util.EcoreValidator;
+import org.modelversioning.emfprofile.*;
 import org.modelversioning.emfprofile.EMFProfilePackage;
 import org.modelversioning.emfprofile.Extension;
 import org.modelversioning.emfprofile.Profile;
@@ -107,6 +108,8 @@ public class EMFProfileValidator extends EObjectValidator {
 				return validateStereotype((Stereotype)value, diagnostics, context);
 			case EMFProfilePackage.EXTENSION:
 				return validateExtension((Extension)value, diagnostics, context);
+			case EMFProfilePackage.ACTION:
+				return validateAction((Action)value, diagnostics, context);
 			default:
 				return true;
 		}
@@ -361,6 +364,15 @@ public class EMFProfileValidator extends EObjectValidator {
 				 Diagnostic.ERROR,
 				 DIAGNOSTIC_SOURCE,
 				 0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean validateAction(Action action, DiagnosticChain diagnostics, Map<Object, Object> context) {
+		return validate_EveryDefaultConstraint(action, diagnostics, context);
 	}
 
 	/**

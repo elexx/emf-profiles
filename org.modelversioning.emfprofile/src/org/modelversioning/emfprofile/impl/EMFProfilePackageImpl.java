@@ -15,6 +15,7 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EValidator;
 import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.emf.ecore.impl.EPackageImpl;
+import org.modelversioning.emfprofile.Action;
 import org.modelversioning.emfprofile.EMFProfileFactory;
 import org.modelversioning.emfprofile.EMFProfilePackage;
 import org.modelversioning.emfprofile.Extension;
@@ -49,6 +50,13 @@ public class EMFProfilePackageImpl extends EPackageImpl implements EMFProfilePac
 	 * @generated
 	 */
 	private EClass extensionEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass actionEClass = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -137,6 +145,15 @@ public class EMFProfilePackageImpl extends EPackageImpl implements EMFProfilePac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EReference getProfile_Actions() {
+		return (EReference)profileEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getStereotype() {
 		return stereotypeEClass;
 	}
@@ -166,6 +183,15 @@ public class EMFProfilePackageImpl extends EPackageImpl implements EMFProfilePac
 	 */
 	public EReference getStereotype_Extensions() {
 		return (EReference)stereotypeEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getStereotype_Actions() {
+		return (EReference)stereotypeEClass.getEStructuralFeatures().get(3);
 	}
 
 	/**
@@ -254,6 +280,33 @@ public class EMFProfilePackageImpl extends EPackageImpl implements EMFProfilePac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EClass getAction() {
+		return actionEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getAction_Name() {
+		return (EAttribute)actionEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getAction_Id() {
+		return (EAttribute)actionEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EMFProfileFactory getEMFProfileFactory() {
 		return (EMFProfileFactory)getEFactoryInstance();
 	}
@@ -278,11 +331,13 @@ public class EMFProfilePackageImpl extends EPackageImpl implements EMFProfilePac
 
 		// Create classes and their features
 		profileEClass = createEClass(PROFILE);
+		createEReference(profileEClass, PROFILE__ACTIONS);
 
 		stereotypeEClass = createEClass(STEREOTYPE);
 		createEAttribute(stereotypeEClass, STEREOTYPE__ICON_PATH);
 		createEAttribute(stereotypeEClass, STEREOTYPE__META_BASE);
 		createEReference(stereotypeEClass, STEREOTYPE__EXTENSIONS);
+		createEReference(stereotypeEClass, STEREOTYPE__ACTIONS);
 
 		extensionEClass = createEClass(EXTENSION);
 		createEReference(extensionEClass, EXTENSION__SOURCE);
@@ -293,6 +348,10 @@ public class EMFProfilePackageImpl extends EPackageImpl implements EMFProfilePac
 		createEReference(extensionEClass, EXTENSION__SUBSETTED);
 		createEReference(extensionEClass, EXTENSION__REDEFINING);
 		createEReference(extensionEClass, EXTENSION__SUBSETTING);
+
+		actionEClass = createEClass(ACTION);
+		createEAttribute(actionEClass, ACTION__NAME);
+		createEAttribute(actionEClass, ACTION__ID);
 	}
 
 	/**
@@ -331,6 +390,7 @@ public class EMFProfilePackageImpl extends EPackageImpl implements EMFProfilePac
 
 		// Initialize classes and features; add operations and parameters
 		initEClass(profileEClass, Profile.class, "Profile", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getProfile_Actions(), this.getAction(), null, "actions", null, 0, -1, Profile.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		EOperation op = addEOperation(profileEClass, this.getStereotype(), "getApplicableStereotypes", 0, -1, IS_UNIQUE, IS_ORDERED);
 		addEParameter(op, theEcorePackage.getEClass(), "eClass", 0, 1, IS_UNIQUE, IS_ORDERED);
@@ -344,6 +404,7 @@ public class EMFProfilePackageImpl extends EPackageImpl implements EMFProfilePac
 		initEAttribute(getStereotype_IconPath(), ecorePackage.getEString(), "iconPath", null, 0, 1, Stereotype.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getStereotype_MetaBase(), theEcorePackage.getEBoolean(), "metaBase", "false", 1, 1, Stereotype.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getStereotype_Extensions(), this.getExtension(), this.getExtension_Source(), "extensions", null, 0, -1, Stereotype.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getStereotype_Actions(), this.getAction(), null, "actions", null, 0, -1, Stereotype.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		op = addEOperation(stereotypeEClass, ecorePackage.getEBoolean(), "isApplicable", 1, 1, IS_UNIQUE, IS_ORDERED);
 		addEParameter(op, theEcorePackage.getEClass(), "eClass", 0, 1, IS_UNIQUE, IS_ORDERED);
@@ -395,6 +456,10 @@ public class EMFProfilePackageImpl extends EPackageImpl implements EMFProfilePac
 
 		op = addEOperation(extensionEClass, ecorePackage.getEBoolean(), "isApplicable", 1, 1, IS_UNIQUE, IS_ORDERED);
 		addEParameter(op, theEcorePackage.getEClass(), "eClass", 1, 1, IS_UNIQUE, IS_ORDERED);
+
+		initEClass(actionEClass, Action.class, "Action", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getAction_Name(), ecorePackage.getEString(), "name", null, 1, 1, Action.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getAction_Id(), ecorePackage.getEString(), "id", null, 1, 1, Action.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Create resource
 		createResource(eNS_URI);

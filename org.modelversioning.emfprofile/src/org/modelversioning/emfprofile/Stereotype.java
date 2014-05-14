@@ -23,6 +23,7 @@ import org.eclipse.emf.ecore.EStructuralFeature;
  *   <li>{@link org.modelversioning.emfprofile.Stereotype#getIconPath <em>Icon Path</em>}</li>
  *   <li>{@link org.modelversioning.emfprofile.Stereotype#isMetaBase <em>Meta Base</em>}</li>
  *   <li>{@link org.modelversioning.emfprofile.Stereotype#getExtensions <em>Extensions</em>}</li>
+ *   <li>{@link org.modelversioning.emfprofile.Stereotype#getActions <em>Actions</em>}</li>
  * </ul>
  * </p>
  *
@@ -198,5 +199,21 @@ public interface Stereotype extends EClass {
 	 * @generated
 	 */
 	EList<Extension> getExtensions();
+
+	/**
+	 * Returns the value of the '<em><b>Actions</b></em>' reference list.
+	 * The list contents are of type {@link org.modelversioning.emfprofile.Action}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Actions</em>' reference list isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Actions</em>' reference list.
+	 * @see org.modelversioning.emfprofile.EMFProfilePackage#getStereotype_Actions()
+	 * @model
+	 * @generated
+	 */
+	EList<Action> getActions();
 
 } // Stereotype

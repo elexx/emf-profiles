@@ -66,6 +66,7 @@ public class StereotypeItemProvider
 
 			addIconPathPropertyDescriptor(object);
 			addMetaBasePropertyDescriptor(object);
+			addActionsPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -110,6 +111,28 @@ public class StereotypeItemProvider
 				 false,
 				 false,
 				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Actions feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addActionsPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Stereotype_actions_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Stereotype_actions_feature", "_UI_Stereotype_type"),
+				 EMFProfilePackage.Literals.STEREOTYPE__ACTIONS,
+				 true,
+				 false,
+				 true,
+				 null,
 				 null,
 				 null));
 	}

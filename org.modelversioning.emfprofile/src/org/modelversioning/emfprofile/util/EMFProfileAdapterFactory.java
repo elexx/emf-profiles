@@ -16,6 +16,7 @@ import org.eclipse.emf.ecore.EModelElement;
 import org.eclipse.emf.ecore.ENamedElement;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
+import org.modelversioning.emfprofile.*;
 import org.modelversioning.emfprofile.EMFProfilePackage;
 import org.modelversioning.emfprofile.Extension;
 import org.modelversioning.emfprofile.Profile;
@@ -88,6 +89,10 @@ public class EMFProfileAdapterFactory extends AdapterFactoryImpl {
 			@Override
 			public Adapter caseExtension(Extension object) {
 				return createExtensionAdapter();
+			}
+			@Override
+			public Adapter caseAction(Action object) {
+				return createActionAdapter();
 			}
 			@Override
 			public Adapter caseEModelElement(EModelElement object) {
@@ -168,6 +173,20 @@ public class EMFProfileAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createExtensionAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.modelversioning.emfprofile.Action <em>Action</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.modelversioning.emfprofile.Action
+	 * @generated
+	 */
+	public Adapter createActionAdapter() {
 		return null;
 	}
 
