@@ -11,27 +11,21 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
 
-import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.dialogs.Dialog;
-import org.eclipse.jface.viewers.ILabelProvider;
-import org.eclipse.jface.viewers.IStructuredContentProvider;
-import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.LabelProvider;
-import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.MessageBox;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.dialogs.ElementTreeSelectionDialog;
 import org.eclipse.ui.dialogs.ISelectionStatusValidator;
 import org.modelversioning.emfprofile.application.registry.ProfileApplicationDecorator;
 import org.modelversioning.emfprofile.application.registry.ui.EMFProfileApplicationRegistryUIPlugin;
+import org.modelversioning.emfprofile.application.registry.ui.dialogs.utils.AutoExpandedTreeSelectionDialog;
+import org.modelversioning.emfprofile.application.registry.ui.dialogs.utils.TreeObject;
+import org.modelversioning.emfprofile.application.registry.ui.dialogs.utils.ViewContentProvider;
 import org.modelversioning.emfprofile.application.registry.ui.observer.ActiveEditorObserver;
 import org.modelversioning.emfprofile.application.registry.ui.providers.ProfileProviderLabelAdapter;
 import org.modelversioning.emfprofile.application.registry.ui.views.EMFProfileApplicationsView;
@@ -56,16 +50,16 @@ public class ApplyStereotypeOnEObjectDialog {
 	 * @param eObject in question.
 	 */
 	public void openApplyStereotypeDialog(EObject eObject) {
-		Collection<TreeParent> parents = new ArrayList<>();
+		Collection<TreeObject> parents = new ArrayList<>();
 		for(ProfileApplicationDecorator profileApplication : profileToStereotypeApplicabilityForEObjectMap.keySet()){
-			TreeParent parent = new TreeParent(profileApplication);
+			TreeObject parent = new TreeObject(profileApplication);
 			for(StereotypeApplicability stereotypeApplicability : profileToStereotypeApplicabilityForEObjectMap.get(profileApplication)){
-				parent.addChild(new TreeObject(stereotypeApplicability));
+				parent.addChild(new TreeObject(stereotypeApplicability, parent));
 			}
 			parents.add(parent);
 		}
 		
-		StereotypeTreeSelectionDialog dialog = new StereotypeTreeSelectionDialog(
+		AutoExpandedTreeSelectionDialog dialog = new AutoExpandedTreeSelectionDialog(
 				PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
 				new ViewLabelProvider(), new ViewContentProvider());
 		dialog.setTitle("Stereotype Selection");
@@ -74,13 +68,13 @@ public class ApplyStereotypeOnEObjectDialog {
 		dialog.setInput(parents);
 		dialog.setDoubleClickSelects(true);
 		dialog.setValidator(new ISelectionStatusValidator() {
-			
 			@Override
 			public IStatus validate(Object[] selection) {
 				if(selection.length==0)
 					return new Status(IStatus.ERROR, EMFProfileApplicationRegistryUIPlugin.PLUGIN_ID, "No Stereotype selected yet.");
 				for (Object object : selection) {
-					if(! (object instanceof TreeParent))
+					TreeObject treeObject = (TreeObject) object;
+					if(treeObject.hasParent() && !treeObject.hasChildren())
 						return new Status(IStatus.OK, EMFProfileApplicationRegistryUIPlugin.PLUGIN_ID, "");
 				}
 				return new Status(IStatus.ERROR, EMFProfileApplicationRegistryUIPlugin.PLUGIN_ID, "No Stereotype selected yet.");
@@ -93,17 +87,15 @@ public class ApplyStereotypeOnEObjectDialog {
 			boolean hasNotApplicableStereotypes = false;
 			Collection<ProfileApplicationDecorator> profileApplicationDecoratorToBeRefreshedInView = new ArrayList<>();
 			for (Object object : treeObjects) {
-				if(!(object instanceof TreeParent)){
-					TreeObject child = (TreeObject) object;
-					StereotypeApplicability stereotypeApplicability = ((StereotypeApplicability)child.getElement());
-					ProfileApplicationDecorator profileApplicationDecorator = (ProfileApplicationDecorator)child.getParent().getElement();
-					try {
-						profileApplicationDecorator.applyStereotype(stereotypeApplicability, eObject);
-						profileApplicationDecoratorToBeRefreshedInView.add(profileApplicationDecorator);
-					} catch (IllegalArgumentException e) {
-						hasNotApplicableStereotypes = true;
-						strBuilder.append(stereotypeApplicability.getStereotype().getName() + ", from profile: " + profileApplicationDecorator.getProfileName() + "\n");
-					}
+				TreeObject child = (TreeObject) object;
+				StereotypeApplicability stereotypeApplicability = ((StereotypeApplicability)child.getElement());
+				ProfileApplicationDecorator profileApplicationDecorator = (ProfileApplicationDecorator)child.getParent().getElement();
+				try {
+					profileApplicationDecorator.applyStereotype(stereotypeApplicability, eObject);
+					profileApplicationDecoratorToBeRefreshedInView.add(profileApplicationDecorator);
+				} catch (IllegalArgumentException e) {
+					hasNotApplicableStereotypes = true;
+					strBuilder.append(stereotypeApplicability.getStereotype().getName() + ", from profile: " + profileApplicationDecorator.getProfileName() + "\n");
 				}
 			}
 			if( ! profileApplicationDecoratorToBeRefreshedInView.isEmpty()){
@@ -120,117 +112,22 @@ public class ApplyStereotypeOnEObjectDialog {
 		}
 		
 	}
-	class TreeObject implements IAdaptable {
-		private TreeParent parent;
-		private Object element;
-		
-		public final Object getElement() {
-			return element;
-		}
-		
-		public TreeObject(Object element){
-			this.element = element;
-		}
-		public void setParent(TreeParent parent) {
-			this.parent = parent;
-		}
-		public TreeParent getParent() {
-			return parent;
-		}
-		
-		public Object getAdapter(Class key) {
-			return null;
-		}
-	}
-	
-	class TreeParent extends TreeObject {
-		private ArrayList children;
-		
-		public TreeParent(String name) {
-			super(name);
-			children = new ArrayList();
-		}
-		public TreeParent(Object element) {
-			super(element);
-			children = new ArrayList();
-		}
-		public void addChild(TreeObject child) {
-			children.add(child);
-			child.setParent(this);
-		}
-		public void removeChild(TreeObject child) {
-			children.remove(child);
-			child.setParent(null);
-		}
-		public TreeObject [] getChildren() {
-			return (TreeObject [])children.toArray(new TreeObject[children.size()]);
-		}
-		public boolean hasChildren() {
-			return children.size()>0;
-		}
-	}
-
-	class ViewContentProvider implements IStructuredContentProvider, 
-										   ITreeContentProvider {
-		private TreeParent invisibleRoot;
-
-		public void inputChanged(Viewer v, Object oldInput, Object newInput) {
-		}
-		public void dispose() {
-		}
-		public Object[] getElements(Object parent) {
-			if (parent instanceof Collection<?>) {
-				return ((Collection<?>) parent).toArray();
-			}
-			return getChildren(parent);
-		}
-		public Object getParent(Object child) {
-			if (child instanceof TreeObject) {
-				return ((TreeObject)child).getParent();
-			}
-			return null;
-		}
-		public Object [] getChildren(Object parent) {
-			if (parent instanceof TreeParent) {
-				return ((TreeParent)parent).getChildren();
-			}
-			return new Object[0];
-		}
-		public boolean hasChildren(Object parent) {
-			if (parent instanceof TreeParent)
-				return ((TreeParent)parent).hasChildren();
-			return false;
-		}
-	}
-	
 	final class ViewLabelProvider extends LabelProvider {
-
+		@Override
 		public String getText(Object obj) {
-			if(((TreeObject)obj).getElement() instanceof ProfileApplicationDecorator)
-				return ((ProfileApplicationDecorator)((TreeObject)obj).getElement()).getName();
-			return labelAdapter.getText(((TreeObject)obj).getElement());
-		}
-		public Image getImage(Object obj) {
-			return labelAdapter.getImage(((TreeObject)obj).getElement());
-//			return PlatformUI.getWorkbench().getSharedImages().getImage(imageKey);
-		}
-	}
-
-	final class StereotypeTreeSelectionDialog extends ElementTreeSelectionDialog{
-
-		public StereotypeTreeSelectionDialog(Shell parent,
-				ILabelProvider labelProvider,
-				ITreeContentProvider contentProvider) {
-			super(parent, labelProvider, contentProvider);
+			Object element = ((TreeObject) obj).getElement();
+			if(element instanceof ProfileApplicationDecorator) {
+				ProfileApplicationDecorator profileApplicationDecorator = (ProfileApplicationDecorator) element;
+				return profileApplicationDecorator.getName();
+			} else {
+				return labelAdapter.getText(element);
+			}
 		}
 		
 		@Override
-		protected Control createDialogArea(Composite parent) {
-			Control control = super.createDialogArea(parent);
-			// setting auto expand was the reason why a sub-type was needed :)
-			getTreeViewer().setAutoExpandLevel(2);
-			getTreeViewer().setInput(getTreeViewer().getInput());
-			return control;
+		public Image getImage(Object obj) {
+			Object element = ((TreeObject) obj).getElement();
+			return labelAdapter.getImage(element);
 		}
 	}
 }

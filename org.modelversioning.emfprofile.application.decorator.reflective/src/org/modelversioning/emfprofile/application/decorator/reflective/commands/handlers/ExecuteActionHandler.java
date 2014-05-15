@@ -1,9 +1,13 @@
 package org.modelversioning.emfprofile.application.decorator.reflective.commands.handlers;
 
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Map;
+
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.Platform;
@@ -13,7 +17,6 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.handlers.HandlerUtil;
-import org.modelversioning.emfprofile.action.ActionHandler;
 import org.modelversioning.emfprofile.application.decorator.reflective.EMFProfileApplicationDecoratorImpl;
 
 public class ExecuteActionHandler extends AbstractHandler {
@@ -26,16 +29,14 @@ public class ExecuteActionHandler extends AbstractHandler {
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		System.out.println("execute");
 
-		for (IConfigurationElement element : Platform.getExtensionRegistry().getConfigurationElementsFor(EXTENSION_POINT_ID)) {
-			try {
-				System.out.println("element: " + element.getAttribute(ATTRIBUTE_ACTION_ID));
+		Map<String, Collection<IConfigurationElement>> actionIdToHandlerMap = new HashMap<>();
 
-				Object o = element.createExecutableExtension(ATTRIBUTE_CLASS);
-				System.out.println("instance: " + o);
-				((ActionHandler) o).doAction();
-			} catch (CoreException e) {
-				throw new ExecutionException("failed to load extension data", e);
+		for (IConfigurationElement element : Platform.getExtensionRegistry().getConfigurationElementsFor(EXTENSION_POINT_ID)) {
+			String actionId = element.getAttribute(ATTRIBUTE_ACTION_ID);
+			if (!actionIdToHandlerMap.containsKey(actionId)) {
+				actionIdToHandlerMap.put(actionId, new LinkedList<IConfigurationElement>());
 			}
+			actionIdToHandlerMap.get(actionId).add(element);
 		}
 
 		if (EMFProfileApplicationDecoratorImpl.getPluginExtensionOperationsListener() != null) {
@@ -45,7 +46,7 @@ public class ExecuteActionHandler extends AbstractHandler {
 				Object element = structuredSelection.getFirstElement();
 				if (element instanceof EObject) {
 					EObject selectedEObject = (EObject) element;
-					EMFProfileApplicationDecoratorImpl.getPluginExtensionOperationsListener().executeAction(selectedEObject);
+					EMFProfileApplicationDecoratorImpl.getPluginExtensionOperationsListener().executeAction(selectedEObject, actionIdToHandlerMap);
 				}
 			}
 		} else {

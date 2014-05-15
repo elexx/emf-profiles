@@ -7,6 +7,10 @@
  */
 package org.modelversioning.emfprofile.application.registry.ui.extensionpoint.decorator;
 
+import java.util.Collection;
+import java.util.Map;
+
+import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.emf.ecore.EObject;
 
 /**
@@ -25,8 +29,9 @@ public interface PluginExtensionOperationsListener {
 	/**
 	 * Executes an action on given {@link EObject}
 	 * @param eObject
+	 * @param actionHandlers a map of actionHandlerIds to a collection of handlers registered for given id
 	 */
-	void executeAction(EObject eObject);
+	void executeAction(EObject eObject, Map<String, Collection<IConfigurationElement>> actionIdToHandlerMap);
 
 	/**
 	 * Notifies the extended plug-in that the 

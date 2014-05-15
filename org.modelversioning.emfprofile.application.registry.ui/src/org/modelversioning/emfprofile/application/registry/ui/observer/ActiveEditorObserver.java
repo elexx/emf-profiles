@@ -19,6 +19,7 @@ import java.util.UUID;
 
 import org.eclipse.core.commands.Command;
 import org.eclipse.core.runtime.Assert;
+import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.ecore.EObject;
@@ -49,6 +50,7 @@ import org.modelversioning.emfprofile.application.registry.ui.EMFProfileApplicat
 import org.modelversioning.emfprofile.application.registry.ui.commands.handlers.StereotypeApplicationsOnSelectedElementHandler;
 import org.modelversioning.emfprofile.application.registry.ui.commands.sourceprovider.ToolbarCommandEnabledState;
 import org.modelversioning.emfprofile.application.registry.ui.dialogs.ApplyStereotypeOnEObjectDialog;
+import org.modelversioning.emfprofile.application.registry.ui.dialogs.ExecuteActionDialog;
 import org.modelversioning.emfprofile.application.registry.ui.extensionpoint.decorator.EMFProfileApplicationDecorator;
 import org.modelversioning.emfprofile.application.registry.ui.extensionpoint.decorator.PluginExtensionOperationsListener;
 import org.modelversioning.emfprofile.application.registry.ui.extensionpoint.decorator.handler.EMFProfileApplicationDecoratorHandler;
@@ -261,14 +263,14 @@ public class ActiveEditorObserver implements PluginExtensionOperationsListener {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void executeAction(final EObject eObject) {
+	public void executeAction(final EObject eObject, Map<String, Collection<IConfigurationElement>> actionIdToHandlerMap) {
 		Assert.isNotNull(eObject);
 		// we are looking in all loaded profiles if there are any stereotypes applicable on eObject
 
 		ProfileApplicationRegistry paRegistry = ProfileApplicationRegistry.INSTANCE;
 		ActiveEditorObserver aeo = ActiveEditorObserver.INSTANCE;
 
-		Map<Stereotype, List<Action>> executableActions = new HashMap<>();
+		Map<Stereotype, Collection<Action>> executableActions = new HashMap<>();
 
 		for (ProfileApplicationDecorator profileApplicationDecorator : paRegistry.getProfileApplications(aeo.getModelIdForWorkbenchPart(aeo.getLastActiveEditorPart()))) {
 			System.out.println(profileApplicationDecorator.getName());
@@ -285,6 +287,13 @@ public class ActiveEditorObserver implements PluginExtensionOperationsListener {
 			for (Action a : executableActions.get(s)) {
 				System.out.println("   Action " + a.getName());
 			}
+		}
+
+		if (!executableActions.isEmpty()) {
+			ExecuteActionDialog executeActionDialog = new ExecuteActionDialog(executableActions, actionIdToHandlerMap);
+			executeActionDialog.openExecuteActionDialog(eObject);
+		} else {
+			MessageDialog.openInformation(viewer.getControl().getShell(), "Info", "Can not execute action: No Actions are connected to this Object: " + eObject.toString());
 		}
 	}
 	
