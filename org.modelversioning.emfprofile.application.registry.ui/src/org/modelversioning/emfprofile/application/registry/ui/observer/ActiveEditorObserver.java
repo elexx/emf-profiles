@@ -268,21 +268,21 @@ public class ActiveEditorObserver implements PluginExtensionOperationsListener {
 		ProfileApplicationRegistry paRegistry = ProfileApplicationRegistry.INSTANCE;
 		ActiveEditorObserver aeo = ActiveEditorObserver.INSTANCE;
 
-		Map<Stereotype, List<Action>> exectuableActions = new HashMap<>();
+		Map<Stereotype, List<Action>> executableActions = new HashMap<>();
 
 		for (ProfileApplicationDecorator profileApplicationDecorator : paRegistry.getProfileApplications(aeo.getModelIdForWorkbenchPart(aeo.getLastActiveEditorPart()))) {
 			System.out.println(profileApplicationDecorator.getName());
 			for (StereotypeApplication stereotypeApplication : profileApplicationDecorator.getStereotypeApplications()) {
 				if (eObject.equals(stereotypeApplication.getAppliedTo())) {
 					System.out.println("found applied stereoytpe: " + stereotypeApplication.getStereotype().getName());
-					exectuableActions.put(stereotypeApplication.getStereotype(), stereotypeApplication.getStereotype().getActions());
+					executableActions.put(stereotypeApplication.getStereotype(), stereotypeApplication.getStereotype().getActions());
 				}
 			}
 		}
 
-		for (Stereotype s : exectuableActions.keySet()) {
+		for (Stereotype s : executableActions.keySet()) {
 			System.out.println("Stereotype " + s.getName());
-			for (Action a : exectuableActions.get(s)) {
+			for (Action a : executableActions.get(s)) {
 				System.out.println("   Action " + a.getName());
 			}
 		}
