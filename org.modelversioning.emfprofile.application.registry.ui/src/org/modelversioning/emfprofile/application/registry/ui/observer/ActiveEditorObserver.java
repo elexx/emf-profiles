@@ -282,13 +282,6 @@ public class ActiveEditorObserver implements PluginExtensionOperationsListener {
 			}
 		}
 
-		for (Stereotype s : executableActions.keySet()) {
-			System.out.println("Stereotype " + s.getName());
-			for (Action a : executableActions.get(s)) {
-				System.out.println("   Action " + a.getName());
-			}
-		}
-
 		if (!executableActions.isEmpty()) {
 			ExecuteActionDialog executeActionDialog = new ExecuteActionDialog(executableActions, actionIdToHandlerMap);
 			executeActionDialog.openExecuteActionDialog(eObject);

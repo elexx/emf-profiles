@@ -69,7 +69,6 @@ public class ExecuteActionDialog {
 		});
 		int result = dialog.open();
 		if (Dialog.OK == result) {
-			System.out.println("Got OK. Selected actions are:");
 			Object[] selection = dialog.getResult();
 
 			StringBuilder strBuilderSuccess = new StringBuilder();
@@ -77,7 +76,6 @@ public class ExecuteActionDialog {
 			for (Object selectedObject : selection) {
 				TreeObject selectedTreeObject = (TreeObject) selectedObject;
 				Action action = (Action) selectedTreeObject.getElement();
-				System.out.println("    " + action.getName() + "(" + action.getId() + ")");
 				if (actionIdToHandlerMap.containsKey(action.getId())) {
 					for (IConfigurationElement element : actionIdToHandlerMap.get(action.getId())) {
 						try {

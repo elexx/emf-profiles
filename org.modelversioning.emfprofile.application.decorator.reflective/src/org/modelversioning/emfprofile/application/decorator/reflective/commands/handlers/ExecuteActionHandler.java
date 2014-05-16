@@ -9,9 +9,7 @@ import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.IConfigurationElement;
-import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.e4.core.di.annotations.Execute;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
@@ -27,8 +25,6 @@ public class ExecuteActionHandler extends AbstractHandler {
 
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
-		System.out.println("execute");
-
 		Map<String, Collection<IConfigurationElement>> actionIdToHandlerMap = new HashMap<>();
 
 		for (IConfigurationElement element : Platform.getExtensionRegistry().getConfigurationElementsFor(EXTENSION_POINT_ID)) {
@@ -54,11 +50,5 @@ public class ExecuteActionHandler extends AbstractHandler {
 			System.err.println("There is no Plugin Extension Operations Listener registered!");
 		}
 		return null;
-
-	}
-
-	@Execute
-	public void execute2(IExtensionRegistry registry) {
-		System.out.println("execute2 " + registry);
 	}
 }

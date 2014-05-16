@@ -25,24 +25,24 @@ public class TreeObject implements IAdaptable {
 		return element;
 	}
 
+	public boolean hasParent() {
+		return parent != null;
+	}
+
 	public TreeObject getParent() {
 		return parent;
 	}
 
-	public void addChild(TreeObject child) {
-		children.add(child);
+	public boolean hasChildren() {
+		return !children.isEmpty();
 	}
 
 	public TreeObject[] getChildren() {
 		return children.toArray(new TreeObject[children.size()]);
 	}
 
-	public boolean hasParent() {
-		return parent != null;
-	}
-
-	public boolean hasChildren() {
-		return !children.isEmpty();
+	public void addChild(TreeObject child) {
+		children.add(child);
 	}
 
 	@Override
