@@ -5,11 +5,8 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.MultiStatus;
 import org.eclipse.core.runtime.Status;
@@ -22,7 +19,7 @@ import org.eclipse.ui.dialogs.ISelectionStatusValidator;
 import org.eclipse.ui.statushandlers.StatusManager;
 import org.modelversioning.emfprofile.Action;
 import org.modelversioning.emfprofile.Stereotype;
-import org.modelversioning.emfprofile.action.ActionHandler;
+import org.modelversioning.emfprofile.action.ActionHandlerExecutor;
 import org.modelversioning.emfprofile.application.registry.ui.EMFProfileApplicationRegistryUIPlugin;
 import org.modelversioning.emfprofile.application.registry.ui.dialogs.utils.AutoExpandedTreeSelectionDialog;
 import org.modelversioning.emfprofile.application.registry.ui.dialogs.utils.TreeObject;
@@ -35,27 +32,25 @@ public class ExecuteActionDialog {
 
 	private final ProfileProviderLabelAdapter labelAdapter = new ProfileProviderLabelAdapter(EMFProfileApplicationsView.getAdapterFactory());
 	private final List<StereotypeApplication> stereotypeApplications;
-	private final Map<String, Collection<IConfigurationElement>> actionIdToHandlerMap;
 
-	public ExecuteActionDialog(List<StereotypeApplication> stereotypeApplications, Map<String, Collection<IConfigurationElement>> actionIdToHandlerMap) {
+	public ExecuteActionDialog(List<StereotypeApplication> stereotypeApplications) {
 		this.stereotypeApplications = stereotypeApplications;
-		this.actionIdToHandlerMap = actionIdToHandlerMap;
 	}
 
 	public void openExecuteActionDialog(EObject eObject) {
 		Collection<TreeObject> parents = new ArrayList<>();
 		Set<Stereotype> alreadyAddedStereotypes = new HashSet<>();
-		
+
 		for (StereotypeApplication stereotypeApplication : stereotypeApplications) {
 			Stereotype stereotype = stereotypeApplication.getStereotype();
-			
+
 			if (!alreadyAddedStereotypes.contains(stereotype)) {
 				TreeObject parent = new TreeObject(stereotype);
 				for (Action action : stereotype.getActions()) {
 					parent.addChild(new TreeObject(action, parent));
 				}
 				parents.add(parent);
-				
+
 				alreadyAddedStereotypes.add(stereotype);
 			}
 		}
@@ -83,36 +78,32 @@ public class ExecuteActionDialog {
 		if (Dialog.OK == result) {
 			Object[] selection = dialog.getResult();
 
-			MultiStatus actionHandlerstatuses = new MultiStatus(EMFProfileApplicationRegistryUIPlugin.PLUGIN_ID, IStatus.INFO, "ExecuteAction results", null);
+			MultiStatus allHandlerStatuses = new MultiStatus(EMFProfileApplicationRegistryUIPlugin.PLUGIN_ID, IStatus.INFO, "ExecuteAction results", null);
 			for (Object selectedObject : selection) {
 				TreeObject selectedTreeObject = (TreeObject) selectedObject;
 				Action action = (Action) selectedTreeObject.getElement();
-				if (actionIdToHandlerMap.containsKey(action.getId())) {
-					for (IConfigurationElement element : actionIdToHandlerMap.get(action.getId())) {
-						try {
-							List<StereotypeApplication> appliedStereotypes = new LinkedList<>();
-							for (StereotypeApplication stereotypeApplication : stereotypeApplications) {
-								if (stereotypeApplication.getStereotype().equals(selectedTreeObject.getParent().getElement()) && stereotypeApplication.getAppliedTo().equals(eObject)) {
-									appliedStereotypes.add(stereotypeApplication);
-								}
-							}
-							Object o = element.createExecutableExtension("class");
-							IStatus outcome = ((ActionHandler) o).doAction(action, appliedStereotypes);
-							actionHandlerstatuses.add(outcome);
-						} catch (CoreException e) {
-							StatusManager.getManager().handle(new Status(IStatus.ERROR, element.getAttribute("class"), "Instanziation of actionHandler '" + element.getAttribute("class") + "' failed", e));
-						}
-					}
-				} else {
-					actionHandlerstatuses.add(new Status(IStatus.INFO, EMFProfileApplicationRegistryUIPlugin.PLUGIN_ID, "No ActionHandler registered for ActionID (" + action.getId() + ")"));
-				}
+
+				List<StereotypeApplication> appliedStereotypes = getStereotypeApplications(eObject, (Stereotype) selectedTreeObject.getParent().getElement());
+
+				IStatus handlerStatuses = ActionHandlerExecutor.getInstance().executeActions(action, appliedStereotypes);
+				allHandlerStatuses.add(handlerStatuses);
 			}
-			if (actionHandlerstatuses.isOK()) {
-				StatusManager.getManager().handle(actionHandlerstatuses, StatusManager.LOG);
+			if (allHandlerStatuses.isOK()) {
+				StatusManager.getManager().handle(allHandlerStatuses, StatusManager.LOG);
 			} else {
-				StatusManager.getManager().handle(actionHandlerstatuses, StatusManager.LOG | StatusManager.SHOW);
+				StatusManager.getManager().handle(allHandlerStatuses, StatusManager.LOG | StatusManager.SHOW);
 			}
 		}
+	}
+
+	private List<StereotypeApplication> getStereotypeApplications(EObject eObject, Stereotype stereotype) {
+		List<StereotypeApplication> appliedStereotypes = new LinkedList<>();
+		for (StereotypeApplication stereotypeApplication : stereotypeApplications) {
+			if (stereotypeApplication.getStereotype().equals(stereotype) && stereotypeApplication.getAppliedTo().equals(eObject)) {
+				appliedStereotypes.add(stereotypeApplication);
+			}
+		}
+		return appliedStereotypes;
 	}
 
 	final class ViewLabelProvider extends LabelProvider {

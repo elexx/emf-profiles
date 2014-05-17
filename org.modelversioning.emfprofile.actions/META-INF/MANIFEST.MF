@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: EMF Profile Actions Registry and Executor
+Bundle-SymbolicName: org.modelversioning.emfprofile.actions;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-Vendor: EMF Profile Actions Registry and Executor
+Bundle-ActivationPolicy: lazy
+Export-Package: org.modelversioning.emfprofile.action
+Require-Bundle: org.eclipse.core.runtime,
+ org.modelversioning.emfprofile,
+ org.eclipse.ui.workbench

@@ -262,7 +262,7 @@ public class ActiveEditorObserver implements PluginExtensionOperationsListener {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void executeAction(final EObject eObject, Map<String, Collection<IConfigurationElement>> actionIdToHandlerMap) {
+	public void executeAction(final EObject eObject) {
 		Assert.isNotNull(eObject);
 		// we are looking in all loaded profiles if there are any stereotypes applicable on eObject
 
@@ -276,7 +276,7 @@ public class ActiveEditorObserver implements PluginExtensionOperationsListener {
 		}
 
 		if (!stereotypeApplications.isEmpty()) {
-			ExecuteActionDialog executeActionDialog = new ExecuteActionDialog(stereotypeApplications, actionIdToHandlerMap);
+			ExecuteActionDialog executeActionDialog = new ExecuteActionDialog(stereotypeApplications);
 			executeActionDialog.openExecuteActionDialog(eObject);
 		} else {
 			MessageDialog.openInformation(viewer.getControl().getShell(), "Info", "No Stereotypes are applied to this Object: " + eObject.toString());

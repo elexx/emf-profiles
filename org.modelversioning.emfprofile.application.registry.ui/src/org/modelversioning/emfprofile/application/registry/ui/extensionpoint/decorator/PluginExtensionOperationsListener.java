@@ -27,11 +27,10 @@ public interface PluginExtensionOperationsListener {
 	void applyStereotype(EObject eObject);
 	
 	/**
-	 * Executes an action on given {@link EObject}
+	 * Executes action(s) on a given {@link EObject}
 	 * @param eObject
-	 * @param actionHandlers a map of actionHandlerIds to a collection of handlers registered for given id
 	 */
-	void executeAction(EObject eObject, Map<String, Collection<IConfigurationElement>> actionIdToHandlerMap);
+	void executeAction(EObject eObject);
 
 	/**
 	 * Notifies the extended plug-in that the 
