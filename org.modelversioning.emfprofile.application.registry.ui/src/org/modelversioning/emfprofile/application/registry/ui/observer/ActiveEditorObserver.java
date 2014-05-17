@@ -42,7 +42,6 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.commands.ICommandService;
 import org.eclipse.ui.handlers.RegistryToggleState;
 import org.eclipse.ui.services.ISourceProviderService;
-import org.modelversioning.emfprofile.Action;
 import org.modelversioning.emfprofile.Stereotype;
 import org.modelversioning.emfprofile.application.registry.ProfileApplicationDecorator;
 import org.modelversioning.emfprofile.application.registry.ProfileApplicationRegistry;
@@ -270,23 +269,17 @@ public class ActiveEditorObserver implements PluginExtensionOperationsListener {
 		ProfileApplicationRegistry paRegistry = ProfileApplicationRegistry.INSTANCE;
 		ActiveEditorObserver aeo = ActiveEditorObserver.INSTANCE;
 
-		Map<Stereotype, Collection<Action>> executableActions = new HashMap<>();
+		List<StereotypeApplication> stereotypeApplications = new LinkedList<>();
 
 		for (ProfileApplicationDecorator profileApplicationDecorator : paRegistry.getProfileApplications(aeo.getModelIdForWorkbenchPart(aeo.getLastActiveEditorPart()))) {
-			System.out.println(profileApplicationDecorator.getName());
-			for (StereotypeApplication stereotypeApplication : profileApplicationDecorator.getStereotypeApplications()) {
-				if (eObject.equals(stereotypeApplication.getAppliedTo())) {
-					System.out.println("found applied stereoytpe: " + stereotypeApplication.getStereotype().getName());
-					executableActions.put(stereotypeApplication.getStereotype(), stereotypeApplication.getStereotype().getActions());
-				}
-			}
+			stereotypeApplications.addAll(profileApplicationDecorator.getStereotypeApplications(eObject));
 		}
 
-		if (!executableActions.isEmpty()) {
-			ExecuteActionDialog executeActionDialog = new ExecuteActionDialog(executableActions, actionIdToHandlerMap);
+		if (!stereotypeApplications.isEmpty()) {
+			ExecuteActionDialog executeActionDialog = new ExecuteActionDialog(stereotypeApplications, actionIdToHandlerMap);
 			executeActionDialog.openExecuteActionDialog(eObject);
 		} else {
-			MessageDialog.openInformation(viewer.getControl().getShell(), "Info", "Can not execute action: No Actions are connected to this Object: " + eObject.toString());
+			MessageDialog.openInformation(viewer.getControl().getShell(), "Info", "No Stereotypes are applied to this Object: " + eObject.toString());
 		}
 	}
 	
