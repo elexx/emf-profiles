@@ -52,7 +52,9 @@ public class ActionHandlerExecutor {
 					IStatus outcome = ((ActionHandler) o).doAction(action, appliedStereotypes);
 					actionHandlerstatuses.add(outcome);
 				} catch (CoreException e) {
-					StatusManager.getManager().handle(new Status(IStatus.ERROR, element.getAttribute(ATTRIBUTE_CLASS), "Instanziation of actionHandler '" + element.getAttribute("class") + "' failed", e));
+					StatusManager.getManager().handle(new Status(IStatus.ERROR, element.getAttribute(ATTRIBUTE_CLASS), "Instanziation of actionHandler '" + element.getAttribute("class") + "' failed", e), StatusManager.LOG | StatusManager.SHOW);
+				} catch (Throwable t) {
+					StatusManager.getManager().handle(new Status(IStatus.ERROR, element.getAttribute(ATTRIBUTE_CLASS), "Catched Exception while executing actionHandler '" + element.getAttribute("class") + "'", t), StatusManager.LOG | StatusManager.SHOW);
 				}
 			}
 		} else {
