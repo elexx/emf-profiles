@@ -1,6 +1,6 @@
 package org.modelversioning.emfprofile.action;
 
-import java.util.Collection;
+import java.util.List;
 
 import org.eclipse.core.runtime.IStatus;
 import org.modelversioning.emfprofile.Action;
@@ -13,5 +13,5 @@ public interface ActionHandler {
 	 * @param stereotypeApplication All stereotype applications for this action's stereotype on the element.
 	 * @return should return {@link IStatus#OK} if executed successful.
 	 */
-	IStatus doAction(Action action, Collection<StereotypeApplication> stereotypeApplications);
+	IStatus doAction(Action action, List<StereotypeApplication> stereotypeApplications);
 }
